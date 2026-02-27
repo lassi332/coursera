@@ -1,26 +1,11 @@
-const express = require("express")
+const express = require("express");
 const app = express();
+const { userRouter } = require("./user")
+const { courseRouter } = require("./course")
 
-app.use("");
+app.use(express.json());
 
-app.post("user/signup", (req,res) => {
-    
-});
-
-app.post("user/login", (req,res) => {
-    
-});
-
-app.post("course/purchase", (req,res) => {
-    
-});
-
-app.get("user/purchases", (req,res) => {
-    
-});
-
-app.get("/courses", (req,res) => {
-    
-});
+app.use("/user", userRouter);
+app.use("/course", courseRouter);
 
 app.listen(3000);
