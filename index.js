@@ -14,7 +14,7 @@ app.use("/purchase", purchaseRouter);
 app.use("/admin", adminRouter);
 
 async function main(){
-    mongoose.connect("mongodb+srv://dhawanlakshya04:xjxuagwF9NSGNGwK@cluster0.h1gr9kw.mongodb.net/")
+    await mongoose.connect("mongodb+srv://dhawanlakshya04:xjxuagwF9NSGNGwK@cluster0.h1gr9kw.mongodb.net/")
     console.log("db connected");
     app.listen(3000);
 }
