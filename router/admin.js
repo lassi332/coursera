@@ -1,3 +1,5 @@
+const express = require("express");
+const adminRouter = express.Router();
 const {adminModel} = require("../db");
 const {z} = require("zod");
 const bcrypt = require('bcrypt');
