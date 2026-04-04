@@ -3,17 +3,17 @@ const schema = mongoose.Schema;
 const objectId = schema.ObjectId;
 
 const userSchema = new schema({
-    email : {type: String, unique: true},
+    email : {type: String},
     password: String,
-    firstName : String,
-    lastName : String,
+    firstname : String,
+    lastname : String,
 })
 
 const adminSchema = new schema({
-    email : {type: String, unique: true},
+    email : {type: String},
     password: String,
-    firstName : String,
-    lastName : String,
+    firstname : String,
+    lastname : String,
 })
 
 const courseSchema = new schema({
