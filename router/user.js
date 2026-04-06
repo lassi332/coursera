@@ -1,9 +1,10 @@
 const express = require("express");
 const userRouter = express.Router();
-const {userModel} = require("../db");
+const {userModel, purchaseModel, courseModel} = require("../db");
 const {z} = require("zod");
 const bcrypt = require('bcrypt');
 const jwt = require("jsonwebtoken");
+const { userMiddleware } = require("../middleware/user");
 
 const signupSchema = z.object({
     email: z.email(),
@@ -79,6 +80,29 @@ userRouter.post("/signin", async (req, res) => {
     res.json({
         token: token
     })
+
+})
+
+userRouter.get("/purchases", userMiddleware, async (req,res) =>{
+    const userId = req.userId;
+
+    const purchases = await purchaseModel.find({
+        userId: userId
+    })
+
+    const courses = await courseModel.find({
+        _id: { $in: purchases.map(x => x.courseId)}
+    });
+
+    if (courses){
+        res.json({
+            courses
+        })
+    }else {
+        res.status(400).json({
+            message : "no courses found"
+        })
+    }
 
 })
 
