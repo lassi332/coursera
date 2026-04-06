@@ -85,19 +85,52 @@ adminRouter.post("/signin", async (req, res) => {
 
 adminRouter.post("/addCourse", adminMiddleware, async (req,res) => {
     const adminId = req.adminId;
-    const { title, description, imageUrl, price } = req.body;
+    const { title, description, imageURL, price } = req.body;
 
-    courseModel.create({
+    const course = await courseModel.create({
         title,
         description,
         price,
-        imageUrl,
+        imageURL,
         creatorId: adminId
     })
 
-    res.json({
-        message: "course created"
+    if (course){
+        res.json({
+            message: "course created"
+        })
+    }else{
+        res.status(400).json({
+            message: "coudent add course"
+        })
+    }
+})
+
+adminRouter.put("/editCourse", adminMiddleware, async (req, res) => {
+    const adminId = req.adminId;
+    console.log(adminId);
+    const { title, description, imageURL, price, courseId } = req.body;
+
+    const course = await courseModel.updateOne({
+        _id: courseId,
+        creatorId: adminId
+    }, {
+        title: title,
+        description: description,
+        price: price,
+        imageURL: imageURL
     })
+
+    console.log(course);
+    if (course.matchedCount){
+        res.json({
+            message : "course updated"
+        })
+    }else {
+        res.status(400).json({
+            messaege: "error updating"
+        })
+    }
 })
 
 
