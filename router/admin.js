@@ -1,9 +1,10 @@
 const express = require("express");
 const adminRouter = express.Router();
-const {adminModel} = require("../db");
+const {adminModel, courseModel} = require("../db");
 const {z} = require("zod");
 const bcrypt = require('bcrypt');
 const jwt = require("jsonwebtoken");
+const {adminMiddleware} = require("../middleware/admin")
 
 const signupSchema = z.object({
     email: z.email(),
@@ -73,12 +74,32 @@ adminRouter.post("/signin", async (req, res) => {
         });
     }
 
-    const token = jwt.sign(usr._id.toString(), process.env.ADMIN_JWT_KEY);
+    const token = jwt.sign({
+        id : usr._id
+    }, process.env.ADMIN_JWT_KEY);
     res.json({
         token: token
     })
 
 })
+
+adminRouter.post("/addCourse", adminMiddleware, async (req,res) => {
+    const adminId = req.adminId;
+    const { title, description, imageUrl, price } = req.body;
+
+    courseModel.create({
+        title,
+        description,
+        price,
+        imageUrl,
+        creatorId: adminId
+    })
+
+    res.json({
+        message: "course created"
+    })
+})
+
 
 module.exports = {
     adminRouter : adminRouter
